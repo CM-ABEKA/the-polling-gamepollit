@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { PollCard } from '@/components/polls/poll-card';
 import { PollService } from '@/lib/polls';
 import { voteOnPoll } from '@/app/polls/poll-actions';
+import { DeletePollButton } from '@/components/polls/delete-poll-button';
+import { deletePollAction } from '@/app/polls/poll-actions';
 
 interface PollPageProps {
   params: { id: string };
@@ -33,6 +35,14 @@ export default async function PollPage({ params }: PollPageProps) {
             await voteOnPoll({ pollId, optionIds });
           }}
         />
+
+        <div className="mt-6 flex justify-end">
+          {/* In a real app, show this only to the owner/admin */}
+          <DeletePollButton pollId={poll.id} onDelete={async (pollId) => {
+            'use server';
+            await deletePollAction(pollId);
+          }} />
+        </div>
       </div>
     </div>
   );

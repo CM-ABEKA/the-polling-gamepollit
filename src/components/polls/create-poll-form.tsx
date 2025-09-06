@@ -7,10 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CreatePollRequest } from '@/types';
+import { CreatePollRequest, Poll } from '@/types';
 import { PollService } from '@/lib/polls';
 
-export function CreatePollForm() {
+interface CreatePollFormProps {
+  onCreate?: (payload: CreatePollRequest) => Promise<Poll>;
+}
+
+export function CreatePollForm({ onCreate }: CreatePollFormProps) {
   const [formData, setFormData] = useState<CreatePollRequest>({
     title: '',
     description: '',
@@ -42,7 +46,11 @@ export function CreatePollForm() {
     setIsSubmitting(true);
 
     try {
-      const poll = await PollService.createPoll({
+      const creator = onCreate ?? (async (payload: CreatePollRequest) => {
+        return PollService.createPoll(payload);
+      });
+
+      const poll = await creator({
         ...formData,
         options: validOptions,
       });

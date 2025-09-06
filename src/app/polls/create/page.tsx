@@ -1,4 +1,5 @@
 import { CreatePollForm } from '@/components/polls/create-poll-form';
+import { createPollAction } from '@/app/polls/poll-actions';
 
 export default function CreatePollPage() {
   return (
@@ -8,7 +9,11 @@ export default function CreatePollPage() {
         <p className="text-gray-600 mt-2">Ask a question and get opinions from the community</p>
       </div>
 
-      <CreatePollForm />
+      <CreatePollForm onCreate={async (payload) => {
+        'use server';
+        const poll = await createPollAction(payload);
+        return poll;
+      }} />
     </div>
   );
 }
