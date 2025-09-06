@@ -1,0 +1,7 @@
+After any significant change in development, create a descriptive git commit and push the change to the remote repository.
+
+Guidance:
+- Use clear, imperative commit messages that summarize the change.
+- Group related edits in a single commit; avoid mixing unrelated changes.
+- Push promptly after committing to keep the remote up to date.
+
