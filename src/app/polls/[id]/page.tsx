@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
 import { PollCard } from '@/components/polls/poll-card';
 import { PollService } from '@/lib/polls';
+import { voteOnPoll } from '@/app/polls/poll-actions';
 
 interface PollPageProps {
   params: { id: string };
@@ -30,8 +30,7 @@ export default async function PollPage({ params }: PollPageProps) {
           showVoteButton={true}
           onVote={async (pollId, optionIds) => {
             'use server';
-            await PollService.vote({ pollId, optionIds });
-            revalidatePath(`/polls/${id}`);
+            await voteOnPoll({ pollId, optionIds });
           }}
         />
       </div>
