@@ -134,3 +134,4 @@ export function validatePollOptions(options: string[]): {
 
   return { isValid: true };
 }
+

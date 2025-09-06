@@ -33,3 +33,4 @@ export function ProtectedRoute({ children, redirectTo = '/auth/login' }: Protect
 
   return <>{children}</>;
 }
+

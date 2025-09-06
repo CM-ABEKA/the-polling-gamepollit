@@ -1,13 +1,14 @@
 import { notFound } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { PollCard } from '@/components/polls/poll-card';
 import { PollService } from '@/lib/polls';
 
 interface PollPageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default async function PollPage({ params }: PollPageProps) {
-  const { id } = await params;
+  const { id } = params;
   
   // In a real app, this would be an API call
   const poll = await PollService.getPollById(id);
@@ -29,11 +30,12 @@ export default async function PollPage({ params }: PollPageProps) {
           showVoteButton={true}
           onVote={async (pollId, optionIds) => {
             'use server';
-            // In a real app, this would handle the vote on the server
-            console.log('Vote:', { pollId, optionIds });
+            await PollService.vote({ pollId, optionIds });
+            revalidatePath(`/polls/${id}`);
           }}
         />
       </div>
     </div>
   );
 }
+

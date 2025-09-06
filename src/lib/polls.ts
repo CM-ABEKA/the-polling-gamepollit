@@ -74,6 +74,20 @@ export class PollService {
   }
 
   static async createPoll(request: CreatePollRequest): Promise<Poll> {
+    // Basic validation for mock API
+    const title = (request.title ?? '').trim();
+    const normalizedOptions = (request.options ?? [])
+      .map(o => (o ?? '').trim())
+      .filter(o => o.length > 0);
+
+    if (!title) {
+      throw new Error('Title is required');
+    }
+
+    if (normalizedOptions.length === 0) {
+      throw new Error('Poll must have at least one non-empty option');
+    }
+
     // TODO: Replace with actual API call
     await this.delay(800);
 
@@ -81,7 +95,7 @@ export class PollService {
       id: String(this.mockPolls.length + 1),
       title: request.title,
       description: request.description,
-      options: request.options.map((text, index) => ({
+      options: normalizedOptions.map((text, index) => ({
         id: String(Date.now() + index),
         text,
         votes: 0,
@@ -151,3 +165,4 @@ export class PollService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
+

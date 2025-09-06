@@ -43,3 +43,4 @@ export interface PollsResponse {
   totalCount: number;
   hasMore: boolean;
 }
+

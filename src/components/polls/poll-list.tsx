@@ -136,3 +136,4 @@ export function PollList({ initialPolls = [], showVoteButtons = true }: PollList
     </div>
   );
 }
+

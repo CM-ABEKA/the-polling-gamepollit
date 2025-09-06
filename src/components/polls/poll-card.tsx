@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,8 +17,10 @@ interface PollCardProps {
 }
 
 export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps) {
+  const router = useRouter();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [isVoting, setIsVoting] = useState(false);
+  const [hasVoted, setHasVoted] = useState(false);
 
   const handleOptionSelect = (optionId: string) => {
     if (!poll.allowMultipleVotes) {
@@ -36,8 +39,10 @@ export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps)
 
     setIsVoting(true);
     try {
-      await onVote(poll.id, selectedOptions);
+      await Promise.resolve(onVote(poll.id, selectedOptions));
       setSelectedOptions([]);
+      setHasVoted(true);
+      router.refresh();
     } catch (error) {
       console.error('Failed to vote:', error);
     } finally {
@@ -123,7 +128,7 @@ export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps)
           ))}
         </div>
 
-        {showVoteButton && poll.isActive && (
+        {showVoteButton && poll.isActive && !hasVoted && (
           <div className="flex items-center justify-between mt-4 pt-4 border-t">
             <div className="text-sm text-gray-600">
               {poll.allowMultipleVotes 
@@ -141,6 +146,12 @@ export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps)
           </div>
         )}
 
+        {showVoteButton && hasVoted && (
+          <div className="mt-4 pt-4 border-t">
+            <div className="text-sm text-green-700">Thank you for voting! Refreshing results...</div>
+          </div>
+        )}
+
         {poll.expiresAt && (
           <div className="text-xs text-gray-500 mt-2">
             Expires {formatDistanceToNow(poll.expiresAt, { addSuffix: true })}
@@ -150,3 +161,4 @@ export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps)
     </Card>
   );
 }
+
