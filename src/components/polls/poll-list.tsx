@@ -21,6 +21,7 @@ export function PollList({ initialPolls = [], showVoteButtons = true }: PollList
 
   useEffect(() => {
     if (!initialPolls.length) {
+      // Initial load of polls when no initial data is provided
       loadPolls();
     }
   }, [initialPolls.length]);
@@ -37,8 +38,10 @@ export function PollList({ initialPolls = [], showVoteButtons = true }: PollList
       const response: PollsResponse = await PollService.getPolls(pageNum, 10);
       
       if (append) {
+        // Append when loading subsequent pages
         setPolls(prev => [...prev, ...response.polls]);
       } else {
+        // Replace on first load or refresh
         setPolls(response.polls);
       }
       
@@ -67,6 +70,7 @@ export function PollList({ initialPolls = [], showVoteButtons = true }: PollList
         )
       );
     } catch (error) {
+      // Surface error to caller so vote button can show a message if desired
       console.error('Failed to vote:', error);
       throw error;
     }
@@ -136,4 +140,5 @@ export function PollList({ initialPolls = [], showVoteButtons = true }: PollList
     </div>
   );
 }
+
 

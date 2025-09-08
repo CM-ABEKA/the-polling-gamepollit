@@ -23,6 +23,7 @@ export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps)
   const [hasVoted, setHasVoted] = useState(false);
 
   const handleOptionSelect = (optionId: string) => {
+    // Toggle vs replace selection depending on allowMultipleVotes
     if (!poll.allowMultipleVotes) {
       setSelectedOptions([optionId]);
     } else {
@@ -39,9 +40,11 @@ export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps)
 
     setIsVoting(true);
     try {
+      // onVote can be a server action when provided from a Server Component
       await Promise.resolve(onVote(poll.id, selectedOptions));
       setSelectedOptions([]);
       setHasVoted(true);
+      // Refresh to fetch latest counts/percentages
       router.refresh();
     } catch (error) {
       console.error('Failed to vote:', error);
@@ -161,4 +164,5 @@ export function PollCard({ poll, showVoteButton = true, onVote }: PollCardProps)
     </Card>
   );
 }
+
 

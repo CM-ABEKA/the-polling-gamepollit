@@ -1,6 +1,13 @@
 import { Poll, CreatePollRequest, VoteRequest, PollsResponse } from '@/types';
 
 // Mock API functions - replace with actual API calls
+/**
+ * PollService
+ *
+ * Encapsulates poll operations (list, read, create, vote, delete).
+ * This mock implementation uses an in-memory array and artificial delays
+ * to simulate server behavior. Replace with real data access for production.
+ */
 export class PollService {
   private static mockPolls: Poll[] = [
     {
@@ -50,6 +57,9 @@ export class PollService {
     },
   ];
 
+  /**
+   * Return a paginated list of polls.
+   */
   static async getPolls(page = 1, limit = 10): Promise<PollsResponse> {
     // TODO: Replace with actual API call
     await this.delay(500);
@@ -65,6 +75,9 @@ export class PollService {
     };
   }
 
+  /**
+   * Return a poll by id or null if not found.
+   */
   static async getPollById(id: string): Promise<Poll | null> {
     // TODO: Replace with actual API call
     await this.delay(300);
@@ -73,6 +86,10 @@ export class PollService {
     return poll || null;
   }
 
+  /**
+   * Create a new poll after validating input, then return the created poll.
+   * Why: Centralizes validation and output normalization.
+   */
   static async createPoll(request: CreatePollRequest): Promise<Poll> {
     // Basic validation for mock API
     const title = (request.title ?? '').trim();
@@ -119,6 +136,9 @@ export class PollService {
     return newPoll;
   }
 
+  /**
+   * Register a vote for one or more options and recalculate percentages.
+   */
   static async vote(request: VoteRequest): Promise<Poll> {
     // TODO: Replace with actual API call
     await this.delay(400);
@@ -151,6 +171,9 @@ export class PollService {
     return poll;
   }
 
+  /**
+   * Delete a poll by id. No-op if the id does not exist.
+   */
   static async deletePoll(id: string): Promise<void> {
     // TODO: Replace with actual API call
     await this.delay(300);
@@ -165,4 +188,5 @@ export class PollService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
+
 

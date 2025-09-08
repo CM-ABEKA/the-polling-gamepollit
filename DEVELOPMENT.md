@@ -198,3 +198,4 @@ When implementing the backend, consider these database tables:
 
 Your polling application is now ready for development! The scaffolded structure provides a solid foundation for building a full-featured polling platform.
 
+

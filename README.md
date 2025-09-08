@@ -1,37 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## ALX Polly
 
-## Getting Started
+Interactive polling app built with Next.js App Router, TypeScript, and Tailwind.
 
-First, run the development server:
+### Tech Stack
+- Next.js (App Router), React, TypeScript
+- Tailwind CSS
+- Vitest for unit tests
 
+### Features
+- Create, browse, and vote on polls
+- Server actions for voting/creating/deleting
+- Mock services for auth and data with easy swap to real APIs
+
+## Setup
+
+### Prerequisites
+- Node 20+
+- pnpm or npm
+
+### Install
 ```bash
-npm run dev
+pnpm install
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
+Create a `.env.local` if wiring a real backend (e.g., Supabase):
+```
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Currently, services use mocked data (`src/lib/auth.ts`, `src/lib/polls.ts`). Replace these with real API calls when ready.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Running Locally
+```bash
+pnpm dev
+# or
+npm run dev
+```
+Visit http://localhost:3000
 
-## Learn More
+## Usage Examples
 
-To learn more about Next.js, take a look at the following resources:
+### Create a Poll
+1. Navigate to `/polls/create`
+2. Enter title, optional description
+3. Add at least two options
+4. Submit to be redirected to the new poll detail
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Vote on a Poll
+1. Open `/polls/[id]` (e.g., `/polls/1`)
+2. Select option(s) and click Vote
+3. Page revalidates to show updated counts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Delete a Poll
+From the poll detail page, click Delete (owner-only in a real app). Page redirects to `/polls`.
 
-## Deploy on Vercel
+## Testing
+```bash
+pnpm test
+```
+Vitest runs unit tests such as `src/lib/polls.test.ts`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
+```
+src/
+  app/
+    polls/
+      [id]/page.tsx        # Poll detail + vote + delete
+      create/page.tsx      # Create poll page
+      poll-actions.ts      # Server actions (vote/create/delete)
+  components/
+    polls/
+      poll-card.tsx        # Poll display + client vote UI
+      poll-list.tsx        # List with pagination
+      create-poll-form.tsx # New poll form
+  lib/
+    polls.ts               # Mocked poll service
+    auth.ts                # Mocked auth service
+  types/                   # Shared types
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# the-polling-gamepollit
+## Contributing
+1. Create a branch
+2. Make changes and write tests
+3. Commit with conventional messages
+4. Open a PR
